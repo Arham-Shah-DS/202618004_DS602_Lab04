@@ -81,14 +81,27 @@ Descriptive statistics (mean, median, std, IQR, skewness, kurtosis) were compute
 ### OLS Regression Model
 **Formula:** `charges ~ age + bmi + children + C(smoker) + C(sex) + C(region) + bmi:C(smoker)`
 
-- **R² / Adjusted R²:** `[value] / [value]`
-- **Key significant predictors:** `[e.g. age, smoker, the bmi:smoker interaction]`
-- **Interpretation:** `[e.g. the bmi × smoker interaction shows that higher BMI disproportionately increases charges for smokers compared to non-smokers]`
+- **R² / Adjusted R²:** 0.841 / 0.840 — the model explains about 84% of the variance in medical charges, a strong fit.
+- **F-statistic:** 780.0 (p < 0.001) — the model as a whole is highly statistically significant.
+
+**Significant predictors (p < 0.05):**
+| Predictor | Coefficient | p-value | Interpretation |
+|---|---|---|---|
+| `age` | +263.62 | 0.000 | Each additional year of age adds ~$264 to predicted charges |
+| `children` | +516.40 | 0.000 | Each additional dependent adds ~$516 |
+| `bmi:C(smoker)[T.yes]` | +1443.10 | 0.000 | For smokers, each unit of BMI adds an extra ~$1,443 on top of the baseline BMI effect — smoking sharply amplifies the cost impact of higher BMI |
+| `C(region)[T.southeast]` | -1210.13 | 0.002 | Southeast region has significantly lower charges than the baseline region |
+| `C(region)[T.southwest]` | -1231.11 | 0.001 | Southwest region also has significantly lower charges than the baseline region |
+| `C(smoker)[T.yes]` | -20,420 | 0.000 | Significant, but see note below on interpreting this alongside the interaction term |
+
+**Not statistically significant (p ≥ 0.05):** `bmi` alone (p = 0.358), `C(sex)[T.male]` (p = 0.061, borderline), `C(region)[T.northwest]` (p = 0.124).
+
+**Note on the smoker coefficient:** the raw `C(smoker)[T.yes]` coefficient looks counterintuitive (large and negative) because, once an interaction term (`bmi:C(smoker)`) is in the model, that coefficient represents the effect of being a smoker *at BMI = 0* — a value that never occurs in practice. The real story is in the interaction term: smoking's effect on charges scales strongly and positively with BMI, meaning smoking and high BMI compound each other's cost impact rather than adding independently.
 
 **Diagnostic checks:**
-- Residuals vs. Fitted: `[linear/homoscedastic or evidence of heteroscedasticity]`
-- Q-Q Plot / Jarque-Bera: `[residuals approx. normal / deviate from normality — note charges' skew as likely cause]`
-- VIF (multicollinearity): `[all predictors below threshold / any concerns]`
+- Residuals vs. Fitted: `[pending — paste output once you run this cell]`
+- Q-Q Plot / Jarque-Bera: `[pending]`
+- VIF (multicollinearity): `[pending]`
 
 ---
 
