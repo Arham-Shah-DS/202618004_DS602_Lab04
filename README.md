@@ -64,18 +64,19 @@ This opens the dashboard at `http://localhost:8501`.
 Descriptive statistics (mean, median, std, IQR, skewness, kurtosis) were computed for `age`, `bmi`, `children`, and `charges`. `charges` shows strong right-skew, consistent with a small subset of high-cost claims (largely driven by smoking status).
 
 ### Hypothesis Test 1 — Smoker vs. Non-Smoker Charges
-- **H0:** No difference in mean charges between smokers and non-smokers.
-- **H1:** A significant difference exists.
-- Normality checked via Shapiro-Wilk; equal variance via Levene's test.
-- **Test used:** `[Two-Sample t-test / Mann-Whitney U — fill in based on your run]`
-- **Result:** statistic = `[value]`, p-value = `[value]`
-- **Conclusion:** `[Reject H0 / Fail to Reject H0]` at α = 0.05 — `[one-line interpretation]`
+- **H0:** Mean charges is equal across smoker groups.
+- **H1:** Mean charges differs across smoker groups.
+- **Normality (Shapiro-Wilk):** non-smokers p = 1.4459e-28, smokers p = 3.6250e-09 — both groups fail normality.
+- **Equal variance (Levene's test):** p = 1.5593e-66 — variances are not equal.
+- **Test used:** Mann-Whitney U test (chosen since neither group is normally distributed)
+- **Result:** statistic = 7403.0000, p-value = 5.2702e-130
+- **Conclusion:** Reject H0 at α = 0.05 — charges differ significantly between smokers and non-smokers. This is the expected and by far the strongest effect in the dataset: smoking status dominates medical charges.
 
-### Hypothesis Test 2 — One-Way ANOVA (Charges Across Regions)
-- **H0:** Mean charges are equal across all four regions.
-- **H1:** At least one region's mean charges differs.
-- **Result:** F-statistic = `[value]`, p-value = `[value]`
-- **Conclusion:** `[Reject H0 / Fail to Reject H0]` at α = 0.05 — `[one-line interpretation]`
+### Hypothesis Test 2 — Chi-Square Test of Association (Smoker vs. Sex)
+- **H0:** Smoker status is independent of sex.
+- **H1:** Smoker status is associated with sex.
+- **Result:** Chi-Square = 7.3929, dof = 1, p-value = 6.5481e-03
+- **Conclusion:** Reject H0 at α = 0.05 — smoking status is significantly associated with sex in this dataset (though this is a weaker, secondary finding compared to Test 1 — a chi-square p-value near 0.006 is a modest association, not a dominant driver of charges).
 
 ### OLS Regression Model
 **Formula:** `charges ~ age + bmi + children + C(smoker) + C(sex) + C(region) + bmi:C(smoker)`
